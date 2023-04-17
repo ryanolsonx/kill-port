@@ -11,12 +11,3 @@
   (let [port (port args)
         pids (pids port)]
     (kill pids))))
-
-# (def main (fn [& args]
-#   (if (not (args-port? args))
-#     (do
-#       (usage)
-#       (os/exit 1)))
-#   (def port (args-port args))
-#   (def pid (get-pid port))))
-  # (pp pid)))
