@@ -11,10 +11,11 @@
     res)))
 
 (def pids (fn [port]
-  (let [proc (os/spawn ["lsof" "-t" "-i" (string/format ":%s" port)] :p { :out :pipe })
+  (let [cmd ["lsof" "-t" "-i" (string/format ":%s" port)]
+        proc (os/spawn cmd :p { :out :pipe })
         output (:read (proc :out) :all)
         pids (string/split "\n" output)]
-    (uniq (filter (fn [pid] (not= pid "")) pids)))))
+    (uniq (take (- (length pids) 1) pids)))))
 
 (def usage (fn []
   (print "Usage: kill-port [port]")))
@@ -24,6 +25,5 @@
     (do
       (usage)
       (os/exit 1)))
-  (def port (last args))
-  (def pids (pids port))
-  (kill pids)))
+  (let [port (last args)]
+    (kill (pids port)))))
